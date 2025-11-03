@@ -1,0 +1,1172 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "TASK MANAGEMENT API",
+        "description": "Um sistema de gestão de tarefas, utilizadores, comentários e notificações, para facilitar o acompanhamento de atividades no ambiente organizacional, garantindo que os utilizadores estejam informados sobre alterações importantes, como atribuição de tarefas, alterações no estado das mesmas ou adição de comentários.",
+        "termsOfService": "http://localhost:3000/terms",
+        "contact": {
+            "name": "API Support",
+            "url": "https://github.com/thinnugly",
+            "email": "renatomuiambo24@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://projetofinal-progaramacaowebavancada.onrender.com",
+            "description": "Production server"
+        },
+        {
+            "url": "http://localhost:3000",
+            "description": "Development server"
+        }
+    ],
+    "paths": {
+        "/auth": {
+            "post": {
+                "summary": "Realiza o login do usuário e retorna o token",
+                "description": "Realiza o login com as credenciais do usuário e retorna um token JWT.",
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "description": "Nome de usuário"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "description": "Senha do usuário"
+                                    }
+                                },
+                                "required": [
+                                    "username",
+                                    "password"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login bem-sucedido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login bem-sucedido"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "jwt_token_aqui"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro de validação de dados"
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "summary": "Obtém a lista de usuários",
+                "description": "Recupera a lista de usuários no banco de dados.",
+                "tags": [
+                    "Users"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuários obtida com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuários encontrados"
+                                        },
+                                        "body": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Usuário Exemplo"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "Nenhum usuário encontrado."
+                    },
+                    "401": {
+                        "description": "Não autorizado. O token de autenticação é inválido ou não foi fornecido."
+                    }
+                }
+            },
+            "post": {
+                "summary": "Cria uma nova conta de usuario",
+                "description": "Se nao usar TOKEN, criara um usuario com perfil de 'employee', caso use, podera escolher o perfil entre 'admin ou employee'",
+                "tags": [
+                    "Users"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Nome do usuário",
+                                        "example": "Renato Madeia Muiambo"
+                                    },
+                                    "auth": {
+                                        "type": "object",
+                                        "properties": {
+                                            "username": {
+                                                "type": "string",
+                                                "description": "Email do usuário",
+                                                "example": "renatomuiambo24@gmail.com"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "description": "Senha do usuário",
+                                                "example": "senhaSegura123"
+                                            },
+                                            "profile": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "admin",
+                                                    "employee"
+                                                ],
+                                                "description": "Perfil do usuário",
+                                                "example": "admin"
+                                            }
+                                        },
+                                        "required": [
+                                            "username",
+                                            "password"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "auth"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuário criado com sucesso"
+                                        },
+                                        "body": {
+                                            "type": "object",
+                                            "properties": {
+                                                "_id": {
+                                                    "type": "string",
+                                                    "example": "60b2b8f3f4f9c29a12aaf5f6"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "description": "Nome do usuário",
+                                                    "example": "Patrocinador premium"
+                                                },
+                                                "auth": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "username": {
+                                                            "type": "string",
+                                                            "description": "Email",
+                                                            "example": "usuario@example.com"
+                                                        },
+                                                        "password": {
+                                                            "type": "string",
+                                                            "description": "Senha criptografada",
+                                                            "example": "$2b$10$e0MYzXyjpJS2zjM0oJrZJe"
+                                                        },
+                                                        "profile": {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "admin",
+                                                                "employee"
+                                                            ],
+                                                            "description": "Perfil do usuário",
+                                                            "example": "admin"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Já existe um usuario com este email"
+                    },
+                    "500": {
+                        "description": "Erro ao criar usuario"
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "summary": "Recupere os dados de um so usuário",
+                "description": "Recupere os dados de um so usuário no banco de dados.",
+                "tags": [
+                    "Users"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID do usuario",
+                        "schema": {
+                            "type": "string",
+                            "example": "60b2b8f3f4f9c29a12aaf5f6"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario obtido com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuário encontrado"
+                                        },
+                                        "body": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Usuário Exemplo"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "Nenhum usuário encontrado."
+                    },
+                    "401": {
+                        "description": "Não autorizado. O token de autenticação é inválido ou não foi fornecido."
+                    }
+                }
+            },
+            "put": {
+                "summary": "Atualize um usuario existente",
+                "description": "Este endpoint permite atualizar um usuario existente na base de dados.",
+                "tags": [
+                    "Users"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID do usuario",
+                        "schema": {
+                            "type": "string",
+                            "example": "60b2b8f3f4f9c29a12aaf5f6"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Nome do usuário",
+                                        "example": "Renato Madeia Muiambo"
+                                    },
+                                    "auth": {
+                                        "type": "object",
+                                        "properties": {
+                                            "username": {
+                                                "type": "string",
+                                                "description": "Email do usuário",
+                                                "example": "renatomuiambo24@gmail.com"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "description": "Senha do usuário",
+                                                "example": "senhaSegura123"
+                                            },
+                                            "profile": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "admin",
+                                                    "employee"
+                                                ],
+                                                "description": "Perfil do usuário",
+                                                "example": "admin"
+                                            }
+                                        },
+                                        "required": [
+                                            "username",
+                                            "password"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "auth"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuário criado com sucesso"
+                                        },
+                                        "body": {
+                                            "type": "object",
+                                            "properties": {
+                                                "_id": {
+                                                    "type": "string",
+                                                    "example": "60b2b8f3f4f9c29a12aaf5f6"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "description": "Nome do usuário",
+                                                    "example": "Patrocinador premium"
+                                                },
+                                                "auth": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "username": {
+                                                            "type": "string",
+                                                            "description": "Email",
+                                                            "example": "usuario@example.com"
+                                                        },
+                                                        "password": {
+                                                            "type": "string",
+                                                            "description": "Senha criptografada",
+                                                            "example": "$2b$10$e0MYzXyjpJS2zjM0oJrZJe"
+                                                        },
+                                                        "profile": {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "admin",
+                                                                "employee"
+                                                            ],
+                                                            "description": "Perfil do usuário",
+                                                            "example": "admin"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Já existe um usuario com este email"
+                    },
+                    "500": {
+                        "description": "Erro ao criar usuario"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Exclui um usuario",
+                "description": "Este endpoint permite excluir um usuario.",
+                "tags": [
+                    "Users"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID do usuario",
+                        "schema": {
+                            "type": "string",
+                            "example": "60b2b8f3f4f9c29a12aaf5f6"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario excluído com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario60b2b8f3f4f9c29a12aaf5f6 excluído com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Este patrocinador ainda está associado a um animal e não pode ser excluído"
+                    },
+                    "404": {
+                        "description": "Patrocinador não encontrado"
+                    },
+                    "500": {
+                        "description": "Erro ao excluir patrocinador"
+                    }
+                }
+            }
+        },
+        "/tasks": {
+            "get": {
+                "summary": "Obtém a lista de tarefas",
+                "description": "Recupera a lista de tarefas no banco de dados. Se admin lista todas as tarefas, caso contrario, lista apenas as tarefas associadas ao usuario.",
+                "tags": [
+                    "Tasks"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de tarefas obtida com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tarefas encontrados"
+                                        },
+                                        "body": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Frontend Teste"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Frontend Teste"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "IN_PROGRESS"
+                                                    },
+                                                    "priority": {
+                                                        "type": "string",
+                                                        "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                    },
+                                                    "due": {
+                                                        "type": "string",
+                                                        "example": "MEDIUM"
+                                                    },
+                                                    "attachedTo": {
+                                                        "type": "string",
+                                                        "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                    },
+                                                    "createdBy": {
+                                                        "type": "string",
+                                                        "example": "67c366ccc9f7b87e508e385e"
+                                                    },
+                                                    "updatedBy": {
+                                                        "type": "string",
+                                                        "example": "67c366ccc9f7b87e508e385e"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "Nenhum tarefa encontrado."
+                    },
+                    "401": {
+                        "description": "Não autorizado. O token de autenticação é inválido ou não foi fornecido."
+                    }
+                }
+            },
+            "post": {
+                "summary": "Cria uma nova tarefa",
+                "description": "So usuarios com perfil de 'admin' podem criar tarefas e associa-las a usuarios com perfil de 'employee'",
+                "tags": [
+                    "Tasks"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "description": "Titulo da tarefa",
+                                        "example": "Design a Database Schema"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "description": "Descricao da tarefa",
+                                        "example": "Design a Database Schema"
+                                    },
+                                    "due": {
+                                        "type": "string",
+                                        "description": "Prazo",
+                                        "example": "2025-03-03"
+                                    },
+                                    "priority": {
+                                        "type": "string",
+                                        "enum": [
+                                            "LOW",
+                                            "MEDIUM",
+                                            "HIGH",
+                                            "URGENT"
+                                        ],
+                                        "description": "Prioridade",
+                                        "example": "HIGH"
+                                    },
+                                    "attachedTo": {
+                                        "type": "string",
+                                        "description": "Usuario associado",
+                                        "example": "67c5bac60db92c7eb3d8dfc0"
+                                    }
+                                },
+                                "required": [
+                                    "title",
+                                    "description",
+                                    "due",
+                                    "priority",
+                                    "attachedTo"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tarefa criada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tarefa criado com sucesso"
+                                        },
+                                        "body": {
+                                            "type": "object",
+                                            "properties": {
+                                                "_id": {
+                                                    "type": "string",
+                                                    "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Frontend Teste"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Frontend Teste"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "IN_PROGRESS"
+                                                },
+                                                "priority": {
+                                                    "type": "string",
+                                                    "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                },
+                                                "due": {
+                                                    "type": "string",
+                                                    "example": "MEDIUM"
+                                                },
+                                                "attachedTo": {
+                                                    "type": "string",
+                                                    "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                },
+                                                "createdBy": {
+                                                    "type": "string",
+                                                    "example": "67c366ccc9f7b87e508e385e"
+                                                },
+                                                "updatedBy": {
+                                                    "type": "string",
+                                                    "example": "67c366ccc9f7b87e508e385e"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado. O token de autenticação é inválido ou não foi fornecido."
+                    },
+                    "409": {
+                        "description": "A task with the same title already exists"
+                    },
+                    "500": {
+                        "description": "Erro ao criar usuario"
+                    }
+                }
+            }
+        },
+        "/tasks/{id}": {
+            "get": {
+                "summary": "Recupere os dados de um so tarefa",
+                "description": "Recupere os dados de um so tarefa no banco de dados.",
+                "tags": [
+                    "Tasks"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID da tarefa",
+                        "schema": {
+                            "type": "string",
+                            "example": "60b2b8f3f4f9c29a12aaf5f6"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de tarefas obtida com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tarefas encontrada"
+                                        },
+                                        "body": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Frontend Teste"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Frontend Teste"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "IN_PROGRESS"
+                                                    },
+                                                    "priority": {
+                                                        "type": "string",
+                                                        "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                    },
+                                                    "due": {
+                                                        "type": "string",
+                                                        "example": "MEDIUM"
+                                                    },
+                                                    "attachedTo": {
+                                                        "type": "string",
+                                                        "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                    },
+                                                    "createdBy": {
+                                                        "type": "string",
+                                                        "example": "67c366ccc9f7b87e508e385e"
+                                                    },
+                                                    "updatedBy": {
+                                                        "type": "string",
+                                                        "example": "67c366ccc9f7b87e508e385e"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "Nenhum tarefa encontrado."
+                    },
+                    "401": {
+                        "description": "Não autorizado. O token de autenticação é inválido ou não foi fornecido."
+                    }
+                }
+            },
+            "put": {
+                "summary": "Atualize uma tarefa existente",
+                "description": "Este endpoint permite atualizar uma tarefa existente na base de dados. Usuarios com perfil de 'employee' so podem mudar o status para [IN_PROGRESS, REVIEW, DONE]",
+                "tags": [
+                    "Tasks"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID do usuario",
+                        "schema": {
+                            "type": "string",
+                            "example": "60b2b8f3f4f9c29a12aaf5f6"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "PENDING",
+                                            "IN_PROGRESS",
+                                            "REVIEW",
+                                            "BLOCKED",
+                                            "DONE",
+                                            "CANCELLED"
+                                        ],
+                                        "description": "Status",
+                                        "example": "REVIEW"
+                                    }
+                                },
+                                "required": [
+                                    "status"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tarefa criada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tarefa criado com sucesso"
+                                        },
+                                        "body": {
+                                            "type": "object",
+                                            "properties": {
+                                                "_id": {
+                                                    "type": "string",
+                                                    "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Frontend Teste"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Frontend Teste"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "IN_PROGRESS"
+                                                },
+                                                "priority": {
+                                                    "type": "string",
+                                                    "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                },
+                                                "due": {
+                                                    "type": "string",
+                                                    "example": "MEDIUM"
+                                                },
+                                                "attachedTo": {
+                                                    "type": "string",
+                                                    "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                },
+                                                "createdBy": {
+                                                    "type": "string",
+                                                    "example": "67c366ccc9f7b87e508e385e"
+                                                },
+                                                "updatedBy": {
+                                                    "type": "string",
+                                                    "example": "67c366ccc9f7b87e508e385e"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado. O token de autenticação é inválido ou não foi fornecido."
+                    },
+                    "409": {
+                        "description": "A task with the same title already exists"
+                    },
+                    "500": {
+                        "description": "Erro ao criar usuario"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Exclui uma tarefa",
+                "description": "Este endpoint permite excluir uma tarefa. So admins podem executar esta acao.",
+                "tags": [
+                    "Tasks"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID do tarefa",
+                        "schema": {
+                            "type": "string",
+                            "example": "60b2b8f3f4f9c29a12aaf5f6"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario excluído com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario60b2b8f3f4f9c29a12aaf5f6 excluído com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Este patrocinador ainda está associado a um animal e não pode ser excluído"
+                    },
+                    "404": {
+                        "description": "Patrocinador não encontrado"
+                    },
+                    "500": {
+                        "description": "Erro ao excluir patrocinador"
+                    }
+                }
+            }
+        },
+        "/tasks/comment/{id}": {
+            "get": {
+                "summary": "Recupere os comentarios de um so tarefa",
+                "description": "Recupere os comentarios de um so tarefa no banco de dados.",
+                "tags": [
+                    "Comments"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID da tarefa",
+                        "schema": {
+                            "type": "string",
+                            "example": "60b2b8f3f4f9c29a12aaf5f6"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de comentarios obtida com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Comentarios encontrada"
+                                        },
+                                        "body": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                    },
+                                                    "task": {
+                                                        "type": "string",
+                                                        "example": "67c5c093333580eed3aeb0d7"
+                                                    },
+                                                    "user": {
+                                                        "type": "string",
+                                                        "example": "67c366ccc9f7b87e508e385e"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Meeting agendado para as 10h."
+                                                    },
+                                                    "createdAt": {
+                                                        "type": "string",
+                                                        "example": "2025-03-04"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "Nenhum comentario encontrado."
+                    },
+                    "401": {
+                        "description": "Não autorizado. O token de autenticação é inválido ou não foi fornecido."
+                    }
+                }
+            }
+        },
+        "/tasks/comment": {
+            "post": {
+                "summary": "Cria um comentario sobre tarefa existente",
+                "description": "Usuarios com perfil de 'admin' podem comentar sobre qualquer tarefas, e usuarios com perfil de 'employee' so podem comentar em tarefas das quais estao associados",
+                "tags": [
+                    "Comments"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "taskId": {
+                                        "type": "string",
+                                        "description": "ID da tarefa",
+                                        "example": "67c5c093333580eed3aeb0d7"
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "description": "Descricao da tarefa",
+                                        "example": "Meeting agendado para as 10h."
+                                    }
+                                },
+                                "required": [
+                                    "taskId",
+                                    "message"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Comentario criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Comentario criado com sucesso"
+                                        },
+                                        "body": {
+                                            "type": "object",
+                                            "properties": {
+                                                "_id": {
+                                                    "type": "string",
+                                                    "example": "5f4e3e5e56f5c9bdb3a3f7b8"
+                                                },
+                                                "task": {
+                                                    "type": "string",
+                                                    "example": "67c5c093333580eed3aeb0d7"
+                                                },
+                                                "user": {
+                                                    "type": "string",
+                                                    "example": "67c366ccc9f7b87e508e385e"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Meeting agendado para as 10h."
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2025-03-04"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado. O token de autenticação é inválido ou não foi fornecido."
+                    },
+                    "404": {
+                        "description": "Tarefa nao encontrada"
+                    },
+                    "500": {
+                        "description": "Erro ao criar usuario"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
