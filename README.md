@@ -45,8 +45,8 @@ npm run start
 ```
 
 - Local backend http://localhost:3000/
-- Production backend: https://projetofinal-progaramacaowebavancada.onrender.com
-- API documentation: https://projetofinal-progaramacaowebavancada.onrender.com/api-docs
+- Production backend: https://api-taskmanagement-devwn.onrender.com
+- API documentation: https://api-taskmanagement-devwn.onrender.com/api-docs
 
 ### User Management
 
