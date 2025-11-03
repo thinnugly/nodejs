@@ -8,7 +8,7 @@ module.exports = (app) => {
         "http://localhost:8080", // Frontend local
         "https://taskmanagement-rmm-devwn.netlify.app", // Frontend em produção
         "http://localhost:3000", // Swagger UI local
-        "https://projetofinal-progaramacaowebavancada.onrender.com", // Swagger UI em produção
+        "https://api-taskmanagement-devwn.onrender.com/", // Swagger UI em produção
     ];
 
     app.use(cors({
