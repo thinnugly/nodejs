@@ -12,6 +12,7 @@ A task management system for managing tasks, users, comments, and notifications,
 Before starting, ensure the following are installed:  
 
 - [Node.js](https://nodejs.org/) (version 18 or higher)  
+- [Vue 3](https://vuejs.org/)
 - [MongoDB](https://www.mongodb.com/) (ensure MongoDB server is running locally or use a cloud instance, e.g., MongoDB Atlas)
 
 ---
@@ -44,9 +45,8 @@ MONGO_URI=
 npm run start 
 ```
 
-- Local backend http://localhost:3000/
-- Production backend: https://api-taskmanagement-devwn.onrender.com
-- API documentation: https://api-taskmanagement-devwn.onrender.com/api-docs
+- Local backend http://localhost:3000
+
 
 ### User Management
 
@@ -59,3 +59,18 @@ Default Administrator Credentials:
 - Username: renatomuiambo24@admin.com
 
 - Password: admin@admin
+
+### 🎨 Frontend (Vue)
+1️⃣ Navigate to the frontend directory (client) and install dependencies:
+```sh
+npm install
+```
+2️⃣ Create a .env file and configure environment variable:
+```sh
+BASE_URL=/app/
+```
+3️⃣ Run the frontend:
+```sh
+npm run serve 
+```
+- Local frontend: http://localhost:8080/app/
