@@ -6,6 +6,7 @@ module.exports = (app) => {
     // Lista de origens permitidas
     const allowedOrigins = [
         "http://localhost:8080", // Frontend local
+        "http://localhost:8081", // Frontend local
         "https://taskmanagement-rmm-devwn.netlify.app", // Frontend em produção
         "http://localhost:3000", // Swagger UI local
         "https://api-taskmanagement-devwn.onrender.com", // Swagger UI em produção

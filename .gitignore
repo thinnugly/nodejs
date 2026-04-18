@@ -1,4 +1,30 @@
-server/node_modules
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Dependências
+server/node_modules/
+client/node_modules/
+
+# Lock files 
+server/package-lock.json
+client/package-lock.json
+
+# Arquivos de ambiente
 server/.env
-client/node_modules
-client/.env
+server/.env.*
+!server/.env.example
+
+
+# Build outputs (opcional)
+server/dist/
+client/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE (opcional)
+.vscode/
+.idea/
+*.swp

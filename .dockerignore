@@ -1,0 +1,46 @@
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Dependências
+**/node_modules/
+**/package-lock.json
+
+# Arquivos de ambiente
+**/.env
+**/.env.*
+!**/.env.example
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Build outputs
+**/dist/
+**/build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Testes
+**/__tests__/
+**/*.test.js
+**/*.spec.js
+
+# READMEs
+README.md
+CHANGELOG.md
+
+# CI/CD
+.github/
+.gitlab-ci.yml

@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: '.env.dev' });
 const MONGO_URI = process.env.MONGO_URI;
 module.exports = {
     mongodb: {
