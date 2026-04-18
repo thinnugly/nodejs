@@ -201,10 +201,10 @@ http://localhost:3000/api-docs
 
 | Platform | Details |
 |----------|---------|
-| 👤 **Author** | Renato Madeia Muiambo |
-| 📧 **Email** | [renatomuiambo24@gmail.com](mailto:renatomuiambo24@gmail.com) |
-| 🐙 **GitHub** | [@thinnugly](https://github.com/thinnugly) |
-| 📁 **Repository** | [https://github.com/thinnugly/nodejs](https://github.com/thinnugly/nodejs) |
+| **Author** | Renato Madeia Muiambo |
+| **Email** | [renatomuiambo24@gmail.com](mailto:renatomuiambo24@gmail.com) |
+| **GitHub** | [@thinnugly](https://github.com/thinnugly) |
+| **Repository** | [https://github.com/thinnugly/nodejs](https://github.com/thinnugly/nodejs) |
 
 ---
 
